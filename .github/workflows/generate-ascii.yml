@@ -25,9 +25,9 @@ jobs:
                 echo 'all steps ran succesfully'
         
     Second-job :
-        needs  : First_job
+        needs  : First_job   # accepts string as well of array of strings & need to provide at job level
 
-        runs-on : ubuntu-latest
+        runs-on : ubuntu-latest    # files created or modifed in prev job will not reflect those changes in current job as it uses new vm [Sol: use artifacts] 
 
         steps: 
             - name : job2-step1
