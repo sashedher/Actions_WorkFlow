@@ -7,5 +7,17 @@ jobs :
     runs-on: ubuntu-latest
     
     steps:
-    - name : First Job
+    - name : Step 1
       run :  echo "This is my first job"
+    
+    - name : Step 2                 
+      uses : actions/checkout@v4      # copy repo to the VM
+    
+    - name : Step 3
+      run : ls -ltr     # Print all the file
+    
+    - name :  Step 4
+      run : |        # pipe - used to execute multiple commands in one step
+            ls -ltr
+            cat README.md
+            echo 'all steps ran succesfully'
