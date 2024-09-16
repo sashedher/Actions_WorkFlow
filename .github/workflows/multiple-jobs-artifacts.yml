@@ -6,7 +6,7 @@ jobs :
 
     Create_artifact:
        
-        runs-on : ububtu-latest
+        runs-on : ubuntu-latest
 
         steps:
             - name : job2-step1
@@ -25,7 +25,7 @@ jobs :
 
         needs : Create_artifact
 
-        runs-on: ububtu-latest
+        runs-on: ubuntu-latest
 
         steps:
             - name : dragon-text-file-artifact-download
@@ -47,6 +47,6 @@ jobs :
               uses: actions/download-artifact@v4
               with:
                 name: cowsay-artifact
-                
+
             - name : Read File
               run : cat dragon.txt
