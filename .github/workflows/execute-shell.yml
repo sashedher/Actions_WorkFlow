@@ -1,0 +1,19 @@
+name : Execute Shell Script
+
+on : push
+
+jobs :
+    Shell_Script:
+        runs-on : ubuntu-latest
+
+        steps :
+            - name : Checkout Repo
+              uses : actions/checkout@v4 
+
+            - name : List all files
+              run : ls -ltra
+
+            - name : Execute Shell Script
+              run : |
+                    chmod +x script_ascii.sh
+                    ./script_ascii.sh
