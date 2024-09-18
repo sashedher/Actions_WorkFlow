@@ -1,10 +1,10 @@
-name : Manual Dispatch
+name : managing secrets
 
 on : 
   workflow_dispatch:
     inputs:
-        logLevel:
-          description: 'Log level'
+        action_type:
+          description: 'action type'
           required: true
           default: 'warning'
           type: choice
@@ -13,26 +13,28 @@ on :
           - update
           - delete
 
-        tags:
-          description: 'Test scenario tags'
-          required: false
-          type: boolean
-
-        gcp-secret-value:
-          description: 'secret string'
+        gcp_secret_name:
+          required: true
+          description: 'secret name'
           type: string
 
-env:
-  LEVEL: ${{ inputs.logLevel }}
-  TAGS: ${{ inputs.tags }}
-  secret : ${{inputs.gcp-secret-value}}
+        gcp_secret_value:
+          required: true
+          description: 'secret string'
+          type: string
   
 jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Log level: $LEVEL"
-          echo "Tags: $TAGS"
-          echo "$secret"
+      - name : Set Secret env
+        run : |
+          INP_SECRET = $(jq -r '.inputs.secret' $GITHUB_EVENT_PATH)
+          echo ::add-mask::$INP_SECRET
+          echo SECRET="$INP_SECRET" >> $GITHUB_ENV
+
+      - name : Run Command
+        run : echo -n $SECRET | gcloud secrets ${{inputs.action_type}} --data-file=- --impersonate-service-account=sa-udp-prod-devops-gce-gh@prj-udp-prod-secrets-iiq0jxqkk.iam.gserviceaccount.com --project=prj-udp-prod-secrets-iiq0jxqkk 
+          
+          
         
