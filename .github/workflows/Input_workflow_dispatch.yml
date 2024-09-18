@@ -6,7 +6,7 @@ on :
         action_type:
           description: 'action type'
           required: true
-          default: 'warning'
+          default: 'create'
           type: choice
           options:
           - create
@@ -15,12 +15,13 @@ on :
 
         gcp_secret_name:
           required: true
-          description: 'secret name'
+          description: 'Secret Name'
           type: string
 
         gcp_secret_value:
           required: true
-          description: 'secret string'
+          description: 'Secret Value'
+          default: 'NA for delete'
           type: string
   
 jobs:
@@ -33,8 +34,12 @@ jobs:
           echo ::add-mask::$INP_SECRET
           echo SECRET="$INP_SECRET" >> $GITHUB_ENV
 
-      - name : Run Command
+      - if : inputs.action_type != "delete"
+        name : Run Command
         run : echo -n $SECRET | gcloud secrets ${{inputs.action_type}} ${{inputs.gcp_secret_name}} --data-file=- --impersonate-service-account=sa-udp-prod-devops-gce-gh@prj-udp-prod-secrets-iiq0jxqkk.iam.gserviceaccount.com --project=prj-udp-prod-secrets-iiq0jxqkk 
-          
+
+      - if : inputs.action_type == "delete"
+        name : Delete Secret
+        run : gcloud secrets ${{inputs.action_type}} ${{inputs.gcp_secret_name}}  --impersonate-service-account=sa-udp-prod-devops-gce-gh@prj-udp-prod-secrets-iiq0jxqkk.iam.gserviceaccount.com --project=prj-udp-prod-secrets-iiq0jxqkk
           
         
