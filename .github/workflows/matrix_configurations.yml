@@ -5,9 +5,17 @@ on : workflow_dispatch
 jobs: 
     matrix_jobs:
         strategy:
+            fail-fast: false  #if any job fails then remaining running jobs will not be cancelled
+            max-parallel: 2
             matrix:
                 os: [ubuntu-latest, ubuntu-20.04, windows-latest]    # all possible combinations runs in parallel 
                 images: [hello-world, alphine]
+                exclude:
+                  - os : windows-latest
+                    images: alphine
+                include:   # can add to list of existing conbinations 
+                  - os : ubuntu-20.04
+                    images : amd64/alphine
 
         runs-on : ${{matrix.os}}
         steps :
