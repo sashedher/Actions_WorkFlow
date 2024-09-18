@@ -34,11 +34,11 @@ jobs:
           echo ::add-mask::$INP_SECRET
           echo SECRET="$INP_SECRET" >> $GITHUB_ENV
 
-      - if : inputs.action_type != "delete"
+      - if : inputs.action_type != 'delete'
         name : Run Command
         run : echo -n $SECRET | gcloud secrets ${{inputs.action_type}} ${{inputs.gcp_secret_name}} --data-file=- --impersonate-service-account=sa-udp-prod-devops-gce-gh@prj-udp-prod-secrets-iiq0jxqkk.iam.gserviceaccount.com --project=prj-udp-prod-secrets-iiq0jxqkk 
 
-      - if : inputs.action_type == "delete"
+      - if : inputs.action_type == 'delete'
         name : Delete Secret
         run : gcloud secrets ${{inputs.action_type}} ${{inputs.gcp_secret_name}}  --impersonate-service-account=sa-udp-prod-devops-gce-gh@prj-udp-prod-secrets-iiq0jxqkk.iam.gserviceaccount.com --project=prj-udp-prod-secrets-iiq0jxqkk
           
