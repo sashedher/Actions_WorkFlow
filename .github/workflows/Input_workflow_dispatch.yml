@@ -10,7 +10,7 @@ on :
           type: choice
           options:
           - create
-          - update
+          - 'versions add'
           - delete
 
         gcp_secret_name:
@@ -36,7 +36,7 @@ jobs:
 
       - if : inputs.action_type != 'delete'
         name : Run Command
-        run : echo -n $SECRET | gcloud secrets ${{inputs.action_type}} ${{inputs.gcp_secret_name}} --data-file=- --impersonate-service-account=sa-udp-prod-devops-gce-gh@prj-udp-prod-secrets-iiq0jxqkk.iam.gserviceaccount.com --project=prj-udp-prod-secrets-iiq0jxqkk 
+        run : echo -n $SECRET | gcloud secrets ${{inputs.action_type}} ${{inputs.gcp_secret_name}} --data-file=- --project=prj-udp-prod-secrets-iiq0jxqkk 
 
       - if : inputs.action_type == 'delete'
         name : Delete Secret
