@@ -29,7 +29,7 @@ jobs:
     steps:
       - name : Set Secret env
         run : |
-          INP_SECRET = $(jq -r '.inputs.secret' $GITHUB_EVENT_PATH)
+          INP_SECRET = $(jq -r '.inputs.gcp_secret_value' $GITHUB_EVENT_PATH)
           echo ::add-mask::$INP_SECRET
           echo SECRET="$INP_SECRET" >> $GITHUB_ENV
 
