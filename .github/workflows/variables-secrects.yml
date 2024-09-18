@@ -11,7 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Docker Build   # for all github runners docker is already installed
+    
       run: echo docker build -t ${{ env.CONTAINER_REGISTRY }}/${{vars.DOCKER_USERNAME}}/$IMAGE_NAME:latest     #vars.Docker_usename from repo variable or organization variable
     
     - name: Docker secret
+      timeout-minutes: 2
       run: echo ${{secrets.DOCKER_PASSCODE}}
+
+   concurrency-test:
+        runs-on: ubuntu-latest
+        concurrency:
+            group : sample-group
+            cancel-in-progress : false
+        
+        steps:
+        - name: Docker Build   # for all github runners docker is already installed
+          run: echo docker build -t ${{ env.CONTAINER_REGISTRY }}/${{vars.DOCKER_USERNAME}}/$IMAGE_NAME:latest     #vars.Docker_usename from repo variable or organization variable
+        
+        - name: Docker secret
+          timeout-minutes: 2
+          run: echo ${{secrets.DOCKER_PASSCODE}}
