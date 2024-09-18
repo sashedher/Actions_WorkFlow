@@ -1,0 +1,17 @@
+name : Variables and Secrects
+
+on : push
+
+env:  # adding at workflow level ( can also add at job level / step level)
+    CONTAINER_REGISTRY: docker.io
+    IMAGE_NAME: github-actions-nginx    
+
+jobs:
+   docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Docker Build   # for all github runners docker is already installed
+      run: echo docker build -t ${{ env.CONTAINER_REGISTRY }}/${{vars.DOCKER_USERNAME}}/$IMAGE_NAME:latest     #vars.Docker_usename from repo variable or organization variable
+    
+    - name: Docker secret
+      run: echo ${{secrets.DOCKER_PASSCODE}}
